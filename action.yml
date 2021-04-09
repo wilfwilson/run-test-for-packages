@@ -13,8 +13,11 @@ runs:
   using: "composite"
   steps:
       - name: "Run tests"
-        run:  pkg-ci-scripts/run_tests.sh
+        run: |
+          @ECHO ON
+          SET CHERE_INVOKING=1
+          C:\cygwin64\bin\bash -l -c "pkg-ci-scripts/run_tests.sh"
         env:
           NO_COVERAGE: ${{ inputs.NO_COVERAGE }}
           GAP_TESTFILE: ${{ inputs.GAP_TESTFILE }}
-        shell: bash
+        shell: cmd
