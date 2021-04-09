@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     name: ${{ matrix.no-coverage }} ${{ matrix.testfile }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     # Don't run this twice on PRs for branches pushed to the same repository
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
     strategy:
@@ -25,14 +25,17 @@ jobs:
     steps:
       # the order of the checkout actions is important because all contents of
       # the target folder of the checkout action is removed
-      - uses: actions/checkout@v2
+      - name: "Clone the Example package"
+        uses: actions/checkout@v2
         with:
           repository: gap-packages/example
-      - uses: actions/checkout@v2
+      - name: "Check out this repository"
+        uses: actions/checkout@v2
         with:
           path: this-action/
-      - uses: gap-actions/setup-gap@v2
-      - uses: gap-actions/build-pkg@v1
+      - uses: gap-actions/setup-cygwin@v1
+      - uses: wilfwilson/setup-gap@cygwin-new
+      - uses: wilfwilson/build-pkg@cygwin-new
       - uses: ./this-action/
         with:
           NO_COVERAGE: ${{ matrix.no-coverage }}
